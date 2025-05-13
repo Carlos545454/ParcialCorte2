@@ -74,10 +74,12 @@ public class VehiculoController {
     public Cursor allVehiculos2() {
         try {
             SQLiteDatabase sql = bd.getReadableDatabase();
-            Cursor cur = sql.rawQuery("SELECT placa AS _id, marca, color FROM vehiculo ORDER BY " + DefBD.col_placa, null);
-            return cur;
+            return sql.rawQuery(
+                    "SELECT placa AS _id, placa, marca, color FROM " + DefBD.tabla_vehiculo +
+                            " ORDER BY " + DefBD.col_placa, null);
+
         } catch (Exception ex) {
-            Toast.makeText(c, "Error consulta vehículos " + ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(c, "Error consulta vehículos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
             return null;
         }
     }
@@ -110,6 +112,23 @@ public class VehiculoController {
             Toast.makeText(c, "Error actualizando vehículo " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+    public Vehiculo obtenerVehiculo(String placa) {
+        String[] args = new String[]{placa};
+        SQLiteDatabase sql = bd.getReadableDatabase();
+        Cursor cursor = sql.query(DefBD.tabla_vehiculo, null, "placa=?", args, null, null, null);
+        if (cursor.moveToFirst()) {
+            String marca = cursor.getString(cursor.getColumnIndexOrThrow(DefBD.col_marca));
+            String color = cursor.getString(cursor.getColumnIndexOrThrow(DefBD.col_color));
+            bd.close();
+            return new Vehiculo(placa, marca, color);
+        } else {
+            bd.close();
+            return null;
+        }
+    }
+
+
 }
 
 
