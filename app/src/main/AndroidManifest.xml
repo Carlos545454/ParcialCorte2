@@ -21,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ListadoVehiculosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EdicionVehiculoActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
